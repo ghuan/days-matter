@@ -1,0 +1,10 @@
+{
+  "resourceVersion": "1.0.0.0",
+  "platformPrePath" : "",
+  "theme": {
+    "baseColor":"#5fa2dd",
+    "backgroundColor":"#0755a2",
+    "css":"ext/resources/MSFApp.css",
+    "localStorageKey": "clientTheme"
+  }
+}

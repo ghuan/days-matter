@@ -1,0 +1,119 @@
+<!DOCTYPE HTML>
+<html manifest="" style="height:100%;">
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=10, user-scalable=yes">
+  <title></title>
+  <script>
+      if(location.pathname.toLocaleLowerCase().indexOf('index.html') == -1){
+          var paths = location.pathname.split('/');
+          if(paths.length > 0 && paths[paths.length - 1] != ''){
+              location.pathname = location.pathname + '/';
+          }
+      }
+  </script>
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="stylesheet" href="css/loaders.css" media="all">
+  <script src="js/decimal/decimal.min.js"></script>
+  <script src="js/jquery/jquery-2.1.4.min.js"></script>
+  <script src="js/jquery/jquery.json2xml.js"></script>
+  <script src="js/jquery/jquery.xml2json.js"></script>
+  <script>
+      var systemName = localStorage.getItem("SystemName");
+      document.getElementsByTagName("title")[0].innerText = systemName || '';
+      //当前环境 dev test pro
+      var UIProfiles;
+      //静态资源版本
+      var MSFResourceVersion;
+      //后端服务器地址
+      var MSFTargetAddress = window.location.href
+          .replace(window.location.hash,"")
+          .replace(window.location.search,"")
+          .replace(window.location.pathname == '/' ? '' : window.location.pathname,"")
+          .replace("?","")
+          .replace("#","");
+      //后端platform平台服务path
+      var MSFPlatformPrePath;
+      //系统默认皮肤色
+      var MSFDefaultTheme;
+      $.ajax({
+          type : "get",
+          url : "config.json?_dc="+(new Date()).getTime(),
+          async : false,
+          success : function(data,success,response){
+              UIProfiles = response.getResponseHeader('UI-Profiles') || 'pro';
+              MSFResourceVersion = data.resourceVersion;
+              MSFPlatformPrePath = data.platformPrePath;
+              MSFDefaultTheme = data.theme || {
+                  baseColor:'#5fa2dd',
+                  backgroundColor:'#0755a2',
+                  css:'ext/resources/MSFApp.css',
+                  localStorageKey: 'clientTheme'
+              }
+              var testTargetAddressResult = $.ajax({url: MSFTargetAddress+"/connect_test.json",async:false});
+              if(testTargetAddressResult.status != 200){
+                  MSFTargetAddress = data.targetAddress;
+              }
+          }
+      });
+      var MSFCurrentTheme = MSFDefaultTheme;
+      if (localStorage.getItem(MSFDefaultTheme.localStorageKey) != null) {
+          MSFCurrentTheme = JSON.parse(localStorage.getItem(MSFDefaultTheme.localStorageKey));
+      }
+
+      //动态加载皮肤css
+      var linkElement = document.createElement("link");
+      linkElement.setAttribute("rel", "stylesheet");
+      linkElement.setAttribute("href", MSFCurrentTheme.css || 'ext/resources/MSFApp.css');
+      linkElement.setAttribute("type", "text/css");
+      $(linkElement).bind('error', function () {
+          MSFCurrentTheme = {
+              baseColor:'#5fa2dd',
+              backgroundColor:'#0755a2',
+              css:'ext/resources/MSFApp.css'
+          }
+          linkElement.setAttribute("href", MSFCurrentTheme.css);
+          $('head').get(0).appendChild(linkElement);
+          localStorage.setItem(MSFDefaultTheme.localStorageKey,JSON.stringify(MSFCurrentTheme))
+      });
+      $('head').get(0).appendChild(linkElement);
+  </script>
+  <!--<script src="http://localhost:8000/CLodopfuncs.js? priority=3" charset="utf-8"></script>
+  <script src="http://localhost:18000/CLodopfuncs.js? priority=2" charset="utf-8"></script>
+  <script src="https://localhost:8443/CLodopfuncs.js? priority=1" charset="utf-8"></script>-->
+  <!-- The line below must be kept intact for Sencha Cmd to build your application -->
+  <script id="microloader" data-app="466a62ba-e3bc-4155-a10e-69fd2df36fdc" type="text/javascript" src="bootstrap.js?_v=1.0.0.0"></script>
+</head >
+
+<body style="height:100%;padding: 0;margin: 0;">
+<table id="msf-web-loading">
+  <tr style="width:100%;height:100%;"><td align="center" style="width:100%;height:100%;">
+    <center >
+      <div class="loader" >
+        <div class="loader-inner ball-spin-fade-loader" style="width:20px;">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <div style="height:50px;"></div>
+        <div class="loader-inner ball-pulse" style="width:150px;">
+          正在加载资源
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+    </center>
+  </td></tr>
+</table>
+<script>
+    document.getElementById('msf-web-loading').style = "width:100%;height:100%;font-size: 16px;background:"+(MSFCurrentTheme.backgroundColor || "#2E5798" )+";color: #fff;font-family: '微软雅黑'; ";
+</script>
+</body>
+</html>

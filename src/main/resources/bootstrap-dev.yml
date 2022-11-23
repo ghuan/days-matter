@@ -1,0 +1,100 @@
+spring:
+  # mysql数据源配置
+#  datasource:
+#    type: com.zaxxer.hikari.HikariDataSource
+#    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+#    username: root
+#    password: 123456
+#    url: jdbc:p6spy:mysql://192.168.3.103:3306/msf-boot?tinyInt1isBit=false&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
+#    hikari:
+#      # 最小空闲连接数量
+#      minimum-idle: 5
+#      # 空闲连接存活最大时间，默认600000（10分钟）
+#      idle-timeout: 180000
+#      # 连接池最大连接数，默认是10
+#      maximum-pool-size: 10
+#      # 连接池名字
+#      pool-name: MyHikariCP
+#      # 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+#      max-lifetime: 1800000
+#      # 数据库连接超时时间,默认30秒，即30000
+#      connection-timeout: 30000
+#      # 连接测试sql
+##      connection-test-query: select 1
+#
+#  jpa:
+#    database: MYSQL
+#    open-in-view: true
+#    hibernate:
+#      #      ddl-auto: validate
+#      # hibernate5 命名规则写法
+#      naming:
+#        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+#    properties:
+#      hibernate:
+#        current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+#        dialect:  com.msf.jpa.hibernate.dialect.MSFMySQL5Dialect
+
+# oracle 数据源配置
+#spring:
+#  datasource:
+#    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+#    type: com.zaxxer.hikari.HikariDataSource
+#    username: msf
+#    password: msf
+#    url: jdbc:p6spy:oracle:thin:@192.168.3.101/orcl
+#    hikari:
+#      # 最小空闲连接数量
+#      minimum-idle: 5
+#      # 空闲连接存活最大时间，默认600000（10分钟）
+#      idle-timeout: 180000
+#      # 连接池最大连接数，默认是10
+#      maximum-pool-size: 10
+#      # 连接池名字
+#      pool-name: MyHikariCP
+#      # 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+#      max-lifetime: 1800000
+#      # 数据库连接超时时间,默认30秒，即30000
+#      connection-timeout: 30000
+#      # 连接测试sql
+#      # connection-test-query: select 1 from dual
+#
+#  jpa:
+#    database: ORACLE
+#    open-in-view: true
+#    hibernate:
+#      #ddl-auto: update
+#      # hibernate5 命名规则写法
+#      naming:
+#        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+#    properties:
+#      hibernate:
+#        current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+#        dialect:  com.msf.jpa.hibernate.dialect.MSFOracle10gDialect
+#        check_nullability: true
+
+  datasource:
+    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+#    driver-class-name: org.sqlite.JDBC
+    url: jdbc:p6spy:sqlite::resource:db/msf.db
+#    username:
+#    password:
+    hikari:
+      # 最小空闲连接数量
+      minimum-idle: 5
+      # 空闲连接存活最大时间，默认600000（10分钟）
+      idle-timeout: 180000
+      # 连接池最大连接数，默认是10
+      maximum-pool-size: 10
+      # 连接池名字
+      pool-name: MyHikariCP
+      # 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+      max-lifetime: 1800000
+      # 数据库连接超时时间,默认30秒，即30000
+      connection-timeout: 30000
+      # 连接测试sql
+      # connection-test-query: select 1 from dual
+  jpa:
+    properties:
+      hibernate:
+        dialect: com.msf.sqlite.SQLiteDialect
