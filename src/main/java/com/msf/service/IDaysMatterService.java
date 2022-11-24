@@ -17,6 +17,4 @@ public interface IDaysMatterService {
 	DaysMatterConfigVO getConfig();
 	void saveConfig(DaysMatterConfigPO daysMatterConfigPO);
 	String getLunarDate(Map<String,Object> req);
-	void addJob(Integer regularMinute);
-	void modifyJobTime(Integer regularMinute);
 }
