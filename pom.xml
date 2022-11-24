@@ -92,6 +92,10 @@
             <version>${project.parent.version}</version>
         </dependency>
         <!--msf-ui end-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-quartz</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

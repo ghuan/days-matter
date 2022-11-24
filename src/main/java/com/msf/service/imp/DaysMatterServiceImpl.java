@@ -4,7 +4,6 @@ import cn.hutool.core.bean.BeanUtil;
 import com.msf.DaysMatterJDialog;
 import com.msf.common.core.exception.BusinessException;
 import com.msf.common.core.util.BeanUtils;
-import com.msf.common.core.util.DateUtils;
 import com.msf.common.core.util.VTools;
 import com.msf.dao.IBaseDao;
 import com.msf.data.DaysMatterClientBuilder;
@@ -15,16 +14,16 @@ import com.msf.data.po.DaysMatterConfigPO;
 import com.msf.data.vo.DaysMatterClientVO;
 import com.msf.data.vo.DaysMatterConfigVO;
 import com.msf.data.vo.PageVO;
-import com.msf.schedule.config.ScheduleConfig;
+import com.msf.schedule.DaysMatterJob;
 import com.msf.service.IDaysMatterService;
 import com.msf.service.IDicUtilService;
 import com.msf.util.LunarSolarConverter;
 import com.msf.util.cnd.CndAnalysis;
+import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.ParseException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
@@ -43,7 +42,9 @@ public class DaysMatterServiceImpl implements IDaysMatterService {
 	@Autowired
 	private IDicUtilService dicUtilService;
 	@Autowired
-	private ScheduleConfig scheduleConfig;
+	private Scheduler quartzScheduler;
+	private String jobName = "daysMatterJob";
+	private String triggerName = "quartzTaskService";
 
 	@Override
 	public void call(Boolean openClient) {
@@ -193,7 +194,7 @@ public class DaysMatterServiceImpl implements IDaysMatterService {
 		daysMatterConfig.setClientWidth(daysMatterConfigPO.getClientWidth());
 		daysMatterConfig.setClientHeight(daysMatterConfigPO.getClientHeight());
         dao.update(daysMatterConfig);
-        setScheduleCron(daysMatterConfig.getRegularMinute());
+		modifyJobTime(daysMatterConfig.getRegularMinute());
         call(true);
     }
 
@@ -206,7 +207,47 @@ public class DaysMatterServiceImpl implements IDaysMatterService {
 		return null;
 	}
 
-	private void setScheduleCron(Integer regularMinute) {
-		scheduleConfig.setCron("0 0/"+regularMinute+" * * * ?");
+	@Override
+	public void addJob(Integer regularMinute) {
+		try {
+			// 创建一项作业
+			JobDetail job = JobBuilder.newJob(DaysMatterJob.class)
+					.withIdentity(jobName).build();
+			// 创建一个触发器
+			DailyTimeIntervalScheduleBuilder scheduleBuilder = DailyTimeIntervalScheduleBuilder.dailyTimeIntervalSchedule().withIntervalInSeconds(regularMinute*60);
+			Trigger trigger = TriggerBuilder.newTrigger()
+					.withIdentity(triggerName)
+					.withSchedule(scheduleBuilder)
+					.build();
+			// 告诉调度器使用该触发器来安排作业
+			quartzScheduler.scheduleJob(job, trigger);
+			// 启动
+			if (!quartzScheduler.isShutdown()) {
+				quartzScheduler.start();
+			}
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	@Override
+	public void modifyJobTime(Integer regularMinute) {
+		try {
+			JobKey jobKey = JobKey.jobKey(jobName);
+			TriggerKey triggerKey = TriggerKey.triggerKey(triggerName);
+			Trigger trigger = quartzScheduler.getTrigger(triggerKey);
+			if (trigger == null) {
+				return;
+			}
+			// 停止触发器
+			quartzScheduler.pauseTrigger(triggerKey);
+			// 移除触发器
+			quartzScheduler.unscheduleJob(triggerKey);
+			// 删除任务
+			quartzScheduler.deleteJob(jobKey);
+			addJob(regularMinute);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+
 	}
 }
