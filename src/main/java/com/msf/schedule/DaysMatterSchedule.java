@@ -30,6 +30,7 @@ public class DaysMatterSchedule {
 
     public void setRegularMinute(Integer regularMinute){
         this.regularMinute = regularMinute;
+        lastExecuteTimeMillis = System.currentTimeMillis();
     }
 
     @Scheduled(cron = "0 0/1 * * * ?")
