@@ -33,9 +33,10 @@ public class DaysMatterSchedule {
         lastExecuteTimeMillis = System.currentTimeMillis();
     }
 
-    @Scheduled(cron = "0 0/1 * * * ?")
+    @Scheduled(cron = "0/30 * * * * ?")
     @Transactional(rollbackFor = {Exception.class})
     public void execute(){
+        log.info("=====================================");
         if(lastExecuteTimeMillis == null){
             lastExecuteTimeMillis = System.currentTimeMillis();
         }
@@ -50,7 +51,7 @@ public class DaysMatterSchedule {
         }
         //加五秒程序执行误差
         if((currentTimeMillis - lastExecuteTimeMillis + 5000)/60000 >= regularMinute){
-            log.info("=================================");
+            log.info("=====================================");
             daysMatterService.call(false);
             lastExecuteTimeMillis = currentTimeMillis;
         }
