@@ -99,10 +99,10 @@ public class DaysMatterClientBuilder {
 	}
 	private String dayNumColor(int distanceDays){
 		return distanceDays >=0
-				? (distanceDays >=this.daysMatterConfigPO.getThresholdDays() ? "#2aabd2"
-				: (distanceDays >=this.daysMatterConfigPO.getThresholdDays()/2 ? "#337ab7"
-				: (distanceDays >=this.daysMatterConfigPO.getThresholdDays()/5 ? "#eb9316"
-				: "#fb0c05" ) ) ) : "#00000";
+				? (distanceDays > 15 ? "#2aabd2"
+				: (distanceDays > 7 ? "#337ab7"
+				: (distanceDays > 3 ? "#eb9316"
+				: "#d9534f" ) ) ) : "#2aabd2";
 	}
 	/**
 	 * @description 构建展示内容
