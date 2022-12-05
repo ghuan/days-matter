@@ -102,7 +102,7 @@ public class DaysMatterClientBuilder {
 				? (distanceDays >=this.daysMatterConfigPO.getThresholdDays() ? "#2aabd2"
 				: (distanceDays >=this.daysMatterConfigPO.getThresholdDays()/2 ? "#337ab7"
 				: (distanceDays >=this.daysMatterConfigPO.getThresholdDays()/5 ? "#eb9316"
-				: "#d9534f" ) ) ) : "#00000";
+				: "#fb0c05" ) ) ) : "#00000";
 	}
 	/**
 	 * @description 构建展示内容
