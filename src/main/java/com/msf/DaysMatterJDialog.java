@@ -39,6 +39,7 @@ public class DaysMatterJDialog extends JDialog {
     private JButton configButton;
     private JButton miniButton;
     private JButton closeButton;
+    private JScrollPane jp;
     private int width = 500;
     private int height = 400;
     private int x, y;
@@ -87,7 +88,7 @@ public class DaysMatterJDialog extends JDialog {
 //            e.printStackTrace();
 //        }
         this.contentLabel.setFont(new java.awt.Font("", 1, 13));
-        JScrollPane jp=new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        this.jp=new JScrollPane(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         this.contentLabel.setVerticalAlignment(SwingConstants.TOP);
         jp.setViewportView(this.contentLabel);
         jp.getVerticalScrollBar().setUnitIncrement(16);
@@ -167,6 +168,7 @@ public class DaysMatterJDialog extends JDialog {
         }
     }
     public void doShow() {
+        this.jp.getViewport().setViewPosition(new Point(0, 0));
         this.setAlwaysOnTop(true);
         this.setVisible(true);
         tray.remove(trayIcon);
