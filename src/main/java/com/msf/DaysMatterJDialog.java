@@ -170,7 +170,6 @@ public class DaysMatterJDialog extends JDialog {
     public void doShow() {
         this.jp.getViewport().setViewPosition(new Point(0, 0));
         this.setAlwaysOnTop(true);
-        this.setVisible(true);
         tray.remove(trayIcon);
         this.setTitle(this.systemName+" - "+new SimpleDateFormat("yyyy年MM月dd日").format(new Date()));
         x = (int) (dim.getWidth() - this.width - 3);
@@ -179,6 +178,9 @@ public class DaysMatterJDialog extends JDialog {
             try {
                 this.setLocation(x, y - i);
                 Thread.sleep(5);
+                if(i == 0){
+                    this.setVisible(true);
+                }
             } catch (InterruptedException ex) {
             }
         }
