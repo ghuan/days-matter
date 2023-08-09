@@ -16,11 +16,9 @@ import com.daysmatter.data.vo.DaysMatterConfigVO;
 import com.daysmatter.data.vo.DaysMatterVO;
 import com.daysmatter.repository.DaysMatterConfigRepository;
 import com.daysmatter.repository.DaysMatterRepository;
-import com.daysmatter.schedule.DaysMatterSchedule;
 import com.daysmatter.service.IDaysMatterService;
 import com.daysmatter.util.LunarSolarConverter;
 import com.gh.framework.common.core.enums.NumberEnum;
-import com.gh.framework.common.data.jpa.factory.SpecificationFactory;
 import com.gh.framework.common.web.data.PageVO;
 import com.google.common.collect.Lists;
 import org.springframework.data.domain.Page;
@@ -32,10 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -47,6 +42,7 @@ import java.util.stream.Collectors;
  * @date 2022/11/16 10:16
  **/
 @Service
+@SuppressWarnings("all")
 public class DaysMatterServiceImpl implements IDaysMatterService {
 	@Resource
 	private DaysMatterJDialog daysMatterJDialog;
@@ -64,7 +60,7 @@ public class DaysMatterServiceImpl implements IDaysMatterService {
 		StringBuilder topContent = new StringBuilder();
 		AtomicBoolean autoOpenClient = new AtomicBoolean(false);
 		//存在小于等于thresholdDays天数的纪念日才打开客户端提示
-		Integer thresholdDays = daysMatterConfig.getThresholdDays() == null ? 7 : daysMatterConfig.getThresholdDays();
+		int thresholdDays = daysMatterConfig.getThresholdDays() == null ? 7 : daysMatterConfig.getThresholdDays();
 		List<DaysMatter> list = daysMatterRepository.findAll();
 		List<DaysMatterDTO> daysMatterDTOS = list.stream().map(d -> {
 			DaysMatterDTO daysMatterDTO = new DaysMatterDTO();
