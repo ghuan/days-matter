@@ -1,0 +1,36 @@
+client:
+  open-on-start: true
+server:
+  port: 9001
+spring:
+  application:
+      name: days-matter
+
+  datasource:
+    ######################################## H2 ##########################################
+#    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:./db/h2
+    username: sa
+    password:
+    hikari:
+      # 最小空闲连接数量
+      minimum-idle: 5
+      # 空闲连接存活最大时间，默认600000（10分钟）
+      idle-timeout: 180000
+      # 连接池最大连接数，默认是10
+      maximum-pool-size: 10
+      # 连接池名字
+      pool-name: MyHikariCP
+      # 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+      max-lifetime: 1800000
+      # 数据库连接超时时间,默认30秒，即30000
+      connection-timeout: 30000
+      # 连接测试sql
+      # connection-test-query: select 1
+
+  jpa:
+    database: H2
+    open-in-view: true
+    generate-ddl: true
+

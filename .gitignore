@@ -1,29 +1,30 @@
-HELP.md
-!.mvn/wrapper/maven-wrapper.jar
-
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-
-### IntelliJ IDEA ###
-.idea
-*.iws
+# Created by .ignore support plugin (hsz.mobi)
+### Java template
+# Compiled class file
+*.class
+# Log file
+*.log
+*.log.gz
+# BlueJ files
+*.ctxt
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+# Package Files #
+*.jar
+*.war
+*.nar
+*.earsample-info
+*.zip
+*.tar.gz
+*.rar
+hs_err_pid*
+*/target
 *.iml
-*.ipr
-target
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-/build/
-
-### VS Code ###
-.vscode/
+.idea
+target/
+.project
+.settings/
+.classpath
+*/logs
+/.idea/
+/logs/

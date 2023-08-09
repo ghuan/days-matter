@@ -3,57 +3,19 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.msf</groupId>
-        <artifactId>msf</artifactId>
-        <version>2.1.0</version>
+        <groupId>com.gh.framework</groupId>
+        <artifactId>gh-framework</artifactId>
+        <version>1.0.0</version>
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <artifactId>days-matter</artifactId>
     <packaging>jar</packaging>
 
     <description>纪念日工具</description>
     <dependencies>
-        <!--jpa-->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-validation</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jdbc</artifactId>
-        </dependency>
-        <!--数据库jdbc-->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>ojdbc6</artifactId>
-            <version>${ojdbc.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.msf</groupId>
-            <artifactId>polardb-jdbc18</artifactId>
-            <version>${polardb-jdbc18.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.msf</groupId>
-            <artifactId>sqlserver-jdbc4</artifactId>
-            <version>${sqlserver-jdbc4.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.xerial</groupId>
-            <artifactId>sqlite-jdbc</artifactId>
-            <version>3.36.0.3</version>
-        </dependency>
-        <!--web 模块-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>com.gh.framework</groupId>
+            <artifactId>gh-common-web</artifactId>
             <exclusions>
                 <!--排除tomcat依赖-->
                 <exclusion>
@@ -67,62 +29,50 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-undertow</artifactId>
         </dependency>
-        <!--p6spy-->
         <dependency>
-            <groupId>p6spy</groupId>
-            <artifactId>p6spy</artifactId>
-            <version>${p6spy.version}</version>
+            <groupId>com.gh.framework</groupId>
+            <artifactId>gh-common-data-jpa</artifactId>
         </dependency>
-        <!--common-core-->
+<!--        <dependency>-->
+<!--            <groupId>org.xerial</groupId>-->
+<!--            <artifactId>sqlite-jdbc</artifactId>-->
+<!--        </dependency>-->
         <dependency>
-            <groupId>com.msf</groupId>
-            <artifactId>msf-common-core</artifactId>
-            <version>${project.parent.version}</version>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
         </dependency>
-        <!--webservice-->
-        <!--<dependency>
-            <groupId>com.msf</groupId>
-            <artifactId>msf-services-ws</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>-->
-        <!--msf-ui start-->
-        <dependency>
-            <groupId>com.msf</groupId>
-            <artifactId>msf-ui</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <!--msf-ui end-->
     </dependencies>
 
     <build>
+        <finalName>${project.name}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <!-- deploy忽略-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.msf.Application</mainClass>
-                    <includeSystemScope>true</includeSystemScope>
+                    <skip>true</skip>
                 </configuration>
             </plugin>
-            <!-- Docker maven plugin -->
+            <!-- 生成querydsl 所需Q类 -->
             <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>1.0.0</version>
-                <configuration>
-                    <imageName>${project.artifactId}</imageName>
-                    <imageTags>
-                        <tag>1.0.1</tag>
-                    </imageTags>
-                    <dockerDirectory>src/main/docker</dockerDirectory>
-                    <resources>
-                        <resource>
-                            <targetPath>/</targetPath>
-                            <directory>${project.build.directory}</directory>
-                            <include>${project.build.finalName}.jar</include>
-                        </resource>
-                    </resources>
-                </configuration>
+                <groupId>com.mysema.maven</groupId>
+                <artifactId>apt-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>process</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>target/generated-sources/java</outputDirectory>
+                            <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

@@ -1,8 +1,0 @@
-控制面板:
-http://localhost:9001/?desktop=view.system.SystemManageContainer
-
-字典管理：
-http://localhost:9001/?desktop=view.dic.DicGrid
-
-纪念日管理：
-http://localhost:9001/?desktop=view.dm.DaysMatterGrid
